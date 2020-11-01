@@ -7,18 +7,19 @@
       wait_for:
         host: "{{ item }}"
         port: 22
-        delay: 30
+        delay: 5
+#        delay: 30
         timeout: 320
-        sleep: 30
+#        sleep: 30
         state: started
       with_inventory_hostnames:
         - all
     
 #optional possible option
-#    - name: optional install python on build&stage instances
-#      command: "ssh -o 'StrictHostKeyChecking=no' ubuntu@{{ item }} -i ./key4CW.pem 'sudo apt update ; sudo apt install -y python ;'"
-#      with_inventory_hostnames:
-#        - all
+    - name: optional install python on build&stage instances
+      command: "ssh -o 'StrictHostKeyChecking=no' ubuntu@{{ item }} -i ./key4CW.pem 'sudo apt update ; sudo apt install -y python ;'"
+      with_inventory_hostnames:
+        - all
 
 - name: Build stage
   hosts: build
@@ -66,8 +67,11 @@
     - name: Tag docker image
       command: docker tag webapp:latest zi10ge/appcw:latest
 
-    - debug:
-        msg: test {{ DOCKER_USER }}
+#    - debug:
+#        msg: "test {{ $DOCKER_USER }}"
+
+#    - debug:
+#        msg: test {{ DOCKER_USER }}
   
     - debug:
         msg: test $DOCKER_USER 
