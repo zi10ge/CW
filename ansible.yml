@@ -67,9 +67,6 @@
       command: docker tag webapp:latest zi10ge/appcw:latest
 
     - debug:
-        msg: test {{ $DOCKER_USER }}
-
-    - debug:
         msg: test {{ DOCKER_USER }}
   
     - debug:
