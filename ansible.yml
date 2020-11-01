@@ -7,19 +7,18 @@
       wait_for:
         host: "{{ item }}"
         port: 22
-        delay: 5
-#        delay: 30
+        delay: 30
         timeout: 320
-#        sleep: 30
+        sleep: 30
         state: started
       with_inventory_hostnames:
         - all
     
 #optional possible option
-    - name: optional install python on build&stage instances
-      command: "ssh -o 'StrictHostKeyChecking=no' ubuntu@{{ item }} -i ./key4CW.pem 'sudo apt update ; sudo apt install -y python ;'"
-      with_inventory_hostnames:
-        - all
+#    - name: optional install python on build&stage instances
+#      command: "ssh -o 'StrictHostKeyChecking=no' ubuntu@{{ item }} -i ./key4CW.pem 'sudo apt update ; sudo apt install -y python ;'"
+#      with_inventory_hostnames:
+#        - all
 
 - name: Build stage
   hosts: build
@@ -55,7 +54,10 @@
 #        src: /tmp/boxfuse/target/hello-1.0.war
 #        dest: ./hello-1.0.war
 #        flat: true
-    
+
+    - name: Add ubuntu to docker group
+      command: sudo usermod -aG docker ubuntu
+
     - name: Copy dockerfile to build instance
       copy:
         src: ./Dockerfile
@@ -67,17 +69,14 @@
     - name: Tag docker image
       command: docker tag webapp:latest zi10ge/appcw:latest
 
-#    - debug:
-#        msg: "test {{ $DOCKER_USER }}"
-
-#    - debug:
-#        msg: test {{ DOCKER_USER }}
-  
     - debug:
-        msg: test $DOCKER_USER 
+        msg: "test $DOCKER_USER"
+ 
+    - name: whoami
+      command: whoami
       
     - name: Login on dockerhub
-      command: echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+      command: "echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin"
 
     - name: Push dockerimage to github
       command: docker push zi10ge/appcw:latest
