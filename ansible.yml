@@ -65,8 +65,6 @@
 
     - name: Login on dockerhub
       command: echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-      command: echo $DOCKER_PASS >>1.txt
-      command: echo $DOCKER_USER >>1.txt
 
     - name: Build and push docker image to github
       docker_image:

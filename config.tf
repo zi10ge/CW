@@ -72,6 +72,7 @@ resource "aws_instance" "build_instance" {
 #!/bin/bash
 sudo apt update
 sudo apt install -y python
+sudo usermod -aG docker ubuntu
 EOF
   tags = {
     Name = "CW build"
@@ -93,6 +94,7 @@ resource "aws_instance" "stage_instance" {
 #!/bin/bash
 sudo apt update
 sudo apt install -y python
+sudo usermod -aG docker ubuntu
 EOF
   tags = {
     Name = "CW stage"
