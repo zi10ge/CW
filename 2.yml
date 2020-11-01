@@ -52,7 +52,7 @@
       command: whoami
       
     - name: Login on dockerhub
-      command: echo "$DOCKER_PASS" | docker login --username "$DOCKER_USER" --password-stdin
+      command: echo "$DOCKER_PASS" | docker login hub.docker.com --username "$DOCKER_USER" --password-stdin
 
     - name: Push dockerimage to github
       command: docker push zi10ge/appcw:latest
