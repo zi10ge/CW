@@ -54,6 +54,13 @@ resource "aws_security_group" "ubuntu" {
   }
 }
 
+
+resource "local_file" "cloud_pem" { 
+  filename = "${path.module}/key4CW.pem"
+  content =  "${tls_private_key.example.private_key_pem}"
+  file_permission = "0600"
+}
+
 resource "aws_instance" "build_instance" {
   ami                    = "${var.image_id}"
   instance_type          = "${var.instance_type}"
@@ -61,10 +68,19 @@ resource "aws_instance" "build_instance" {
   subnet_id              = "${var.subnet_id}"
   key_name               = "${aws_key_pair.generated_key.key_name}"
   associate_public_ip_address = true 
+  user_data = <<EOF
+#!/bin/bash
+sudo apt update
+sudo apt install -y python
+EOF
   tags = {
     Name = "CW build"
   }
+  provisioner "local-exec" {
+    command = "sed -i \"/build/a ${aws_instance.build_instance.public_ip}\" hosts"
+  }
 }
+
 
 resource "aws_instance" "stage_instance" {
   ami                    = "${var.image_id}"
@@ -73,7 +89,15 @@ resource "aws_instance" "stage_instance" {
   subnet_id              = "${var.subnet_id}"
   key_name               = "${aws_key_pair.generated_key.key_name}"
   associate_public_ip_address = true 
+  user_data = <<EOF
+#!/bin/bash
+sudo apt update
+sudo apt install -y python
+EOF
   tags = {
     Name = "CW stage"
   }
+  provisioner "local-exec" {
+    command = "sed -i \"/stage/a ${aws_instance.stage_instance.public_ip}\" hosts"
+  }  
 }

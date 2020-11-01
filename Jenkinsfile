@@ -13,13 +13,19 @@ pipeline {
             }
         }
         
-        stage('create AWS instances') {
+        stage('Create AWS instances') {
             steps {
                   withAWS(credentials: 'aws4CW') {
                     sh 'terraform init'
                     sh 'terraform plan -out config.out'
                     sh 'terraform apply config.out'
                 }
+            }
+        }
+
+        stage('Configure instances, build and provision app with ansible') {
+            steps {
+                ansiblePlaybook disableHostKeyChecking: true, becomeUser: 'ubuntu', extras: '-vv', installation: 'ansible', inventory: 'hosts', playbook: 'ansible.yml'
             }
         }
     }
