@@ -65,11 +65,20 @@
 
     - name: Tag docker image
       command: docker tag webapp:latest zi10ge/appcw:latest
+
+    - debug:
+      msg: test {{ $DOCKER_USER }}
+
+    - debug:
+      msg: test {{ DOCKER_USER }}
+  
+    - debug:
+      msg: test $DOCKER_USER 
       
     - name: Login on dockerhub
       command: echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
 
-    - name: Push dockerimage to ECR
+    - name: Push dockerimage to github
       command: docker push zi10ge/appcw:latest
 
 # for this alternative need python >= 2.7 
