@@ -1,0 +1,61 @@
+---
+- name: Build stage
+  hosts: build
+  remote_user: ubuntu
+  become: yes
+  become_user: root
+      
+  vars:
+    ansible_ssh_private_key_file: "./key4CW.pem"
+    
+  tasks:
+    - name: update apt cache
+      apt: update_cache=true
+    
+    - name: Install packages
+      apt: pkg={{ item }} state=latest
+      with_items:
+        - default-jdk
+        - maven
+        - git
+        - docker.io
+    
+    - name: clone boxfuse
+      git: repo=https://github.com/boxfuse/boxfuse-sample-java-war-hello.git dest=/tmp/boxfuse
+      tags: deploy
+       
+    - name: package boxfuse war
+      command: mvn package -f /tmp/boxfuse
+
+# 4test only copy war file to jenkins host
+#    - name: Copy WAR
+#      fetch:
+#        src: /tmp/boxfuse/target/hello-1.0.war
+#        dest: ./hello-1.0.war
+#        flat: true
+
+    - name: Add ubuntu to docker group
+      command: sudo usermod -aG docker ubuntu
+
+    - name: Copy dockerfile to build instance
+      copy:
+        src: ./Dockerfile
+        dest: /tmp/boxfuse/target
+    
+    - name: Build docker image
+      command: docker build -f /tmp/boxfuse/target/Dockerfile -t webapp /tmp/boxfuse
+
+    - name: Tag docker image
+      command: docker tag webapp:latest zi10ge/appcw:latest
+
+    - debug:
+        msg: "test $DOCKER_USER"
+ 
+    - name: whoami
+      command: whoami
+      
+    - name: Login on dockerhub
+      command: echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+
+    - name: Push dockerimage to github
+      command: docker push zi10ge/appcw:latest
