@@ -47,15 +47,12 @@
 
     - name: Tag docker image
       command: docker tag webapp:latest zi10ge/appcw:latest
-
-    - debug:
-        msg: "test ${DOCKER_USER}"
  
     - name: whoami
       command: whoami
       
     - name: Login on dockerhub
-      command: "echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin"
+      command: echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
 
     - name: Push dockerimage to github
       command: docker push zi10ge/appcw:latest
