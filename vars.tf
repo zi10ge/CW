@@ -6,6 +6,10 @@ variable "key_name" {
   default = "key4CW"
 }
 
+variable "sg_name" {
+  default = "sg4CW"
+}
+
 variable "instance_type" {
  default = "t2.micro"
 }
