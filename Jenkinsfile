@@ -25,7 +25,9 @@ pipeline {
 
         stage('Configure instances, build and provision app with ansible') {
             steps {
-                ansiblePlaybook disableHostKeyChecking: true, becomeUser: 'ubuntu', extras: '-vv', installation: 'ansible', inventory: 'hosts', playbook: 'ansible.yml'
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]){
+                   ansiblePlaybook disableHostKeyChecking: true, becomeUser: 'ubuntu', extras: '-vv', installation: 'ansible', inventory: 'hosts', playbook: 'ansible.yml'
+                }                
             }
         }
     }

@@ -62,3 +62,15 @@
     
     #- name: Build docker image
     #  command: docker build -f /tmp/boxfuse/target/Dockerfile -t webapp /tmp/boxfuse
+
+    - name: Login on dockerhub
+      command: echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+
+    - name: Build and push docker image to github
+      docker_image:
+        build:
+          path: /tmp/boxfuse
+        name: zi10ge/appcw
+        push: yes
+        tag: latest
+        source: build
