@@ -9,7 +9,7 @@ pipeline {
 
         stage ('Get git repo') {
             steps {
-                git 'https://github.com/zi10ge/awstest.git'
+                git 'https://github.com/zi10ge/CW.git'
             }
         }
         

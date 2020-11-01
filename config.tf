@@ -50,15 +50,9 @@ resource "aws_security_group" "ubuntu" {
   }
 
   tags = {
-    Name = "CW project"
+    Name = "CW pipeline"
   }
 }
-
-#
-#resource "local_file" "cloud_pem" { 
-#  filename = "${path.module}/cloudtls.pem"
-#  content =  "${tls_private_key.example.private_key_pem}"
-#}
 
 resource "aws_instance" "build_instance" {
   ami                    = "${var.image_id}"
@@ -66,9 +60,20 @@ resource "aws_instance" "build_instance" {
   vpc_security_group_ids = ["${aws_security_group.ubuntu.id}"]
   subnet_id              = "${var.subnet_id}"
   key_name               = "${aws_key_pair.generated_key.key_name}"
-  count                  = 1
   associate_public_ip_address = true 
-  user_data = <<EOF
-#!/bin/bash
-EOF
+  tags = {
+    Name = "CW build"
+  }
+}
+
+resource "aws_instance" "stage_instance" {
+  ami                    = "${var.image_id}"
+  instance_type          = "${var.instance_type}"
+  vpc_security_group_ids = ["${aws_security_group.ubuntu.id}"]
+  subnet_id              = "${var.subnet_id}"
+  key_name               = "${aws_key_pair.generated_key.key_name}"
+  associate_public_ip_address = true 
+  tags = {
+    Name = "CW stage"
+  }
 }
