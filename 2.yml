@@ -33,9 +33,9 @@
 #        src: /tmp/boxfuse/target/hello-1.0.war
 #        dest: ./hello-1.0.war
 #        flat: true
-
-    - name: Add ubuntu to docker group
-      command: sudo usermod -aG docker ubuntu
+#
+#    - name: Add ubuntu to docker group
+#      command: sudo usermod -aG docker ubuntu
 
     - name: Copy dockerfile to build instance
       copy:
@@ -52,7 +52,8 @@
       command: whoami
       
     - name: Login on dockerhub
-      command: echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+      command: echo "$DOCKER_PASS" | docker login --username "$DOCKER_USER" --password-stdin
 
     - name: Push dockerimage to github
       command: docker push zi10ge/appcw:latest
+      
