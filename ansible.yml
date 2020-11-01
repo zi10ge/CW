@@ -7,9 +7,9 @@
       wait_for:
         host: "{{ item }}"
         port: 22
-        delay: 5
+        delay: 30
         timeout: 320
-        sleep: 10
+        sleep: 30
         state: started
       with_inventory_hostnames:
         - all
@@ -26,4 +26,3 @@
   tasks:
     - name: Test message
       command: echo "HI ALL!"
-    
