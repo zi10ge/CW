@@ -6,12 +6,13 @@ pipeline {
     }
 
     stages {
-        stage ('Get git repository') {
+
+        stage ('Get git repo') {
             steps {
                 git 'https://github.com/zi10ge/CW.git'
             }
         }
-
+        
         stage('Create AWS instances') {
             steps {
                   withAWS(credentials: 'aws4CW') {
@@ -27,7 +28,6 @@ pipeline {
                 sh 'ansible-playbook local.yml -i hosts -vv'
             }
         }
-
         stage('Build app') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker', passwordVariable: 'DOCKER_USER', usernameVariable: 'DOCKER_PASS')]) {
@@ -35,7 +35,6 @@ pipeline {
                 }                
             }
         }
-        
         stage('Provision app') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker', passwordVariable: 'DOCKER_USER', usernameVariable: 'DOCKER_PASS')]) {
