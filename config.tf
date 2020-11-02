@@ -69,7 +69,7 @@ resource "local_file" "cloud_pem" {
 resource "aws_instance" "build_instance" {
   ami                    = "${var.image_id}"
   instance_type          = "${var.instance_type}"
-  vpc_security_group_ids = "${aws_security_group.ubuntu.id}"
+  vpc_security_group_ids = ["${aws_security_group.ubuntu.id}"]
   subnet_id              = "${var.subnet_id}"
   key_name               = "${aws_key_pair.generated_key.key_name}"
   associate_public_ip_address = true 
@@ -91,7 +91,7 @@ EOF
 resource "aws_instance" "stage_instance" {
   ami                    = "${var.image_id}"
   instance_type          = "${var.instance_type}"
-  vpc_security_group_ids = "${aws_security_group.ubuntu.id}"
+  vpc_security_group_ids = ["${aws_security_group.ubuntu.id}"]
   subnet_id              = "${var.subnet_id}"
   key_name               = "${aws_key_pair.generated_key.key_name}"
   associate_public_ip_address = true 
