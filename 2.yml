@@ -55,7 +55,7 @@
       command: 'echo {{ foo1 }}'  
       
     - name: Login on dockerhub
-      command: 'echo "{{ foo1 }}" | docker login docker.io --username "{{ foo2 }}" --password-stdin'
+      command: 'docker login -u {{ foo2 }} -p {{ foo1 }}'
 
     - name: Push dockerimage to github
       command: 'docker push zi10ge/appcw:latest'
