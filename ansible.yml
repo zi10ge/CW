@@ -24,8 +24,6 @@
     ansible_ssh_private_key_file: "./key4CW.pem"
     
   tasks:
- #   - name: update apt cache
- #     apt: update_cache=true
     
     - name: Install packages
       apt: pkg={{ item }} state=latest
@@ -41,13 +39,6 @@
        
     - name: package boxfuse war
       command: mvn package -f /tmp/boxfuse
-
-# 4test only copy war file to jenkins host
-#    - name: Copy WAR
-#      fetch:
-#        src: /tmp/boxfuse/target/hello-1.0.war
-#        dest: ./hello-1.0.war
-#        flat: true
 
     - name: Add ubuntu to docker group
       command: sudo usermod -aG docker ubuntu
@@ -69,15 +60,6 @@
     - name: Push dockerimage to github
       command: 'docker push zi10ge/appcw:latest'
 
-#    - name: Build and push docker image to github
-#      docker_image:
-#        build:
-#          path: /tmp/boxfuse
-#        name: zi10ge/appcw
-#        push: yes
-#        tag: latest
-#        source: build
-
 - name: Stage instance
   hosts: stage
   remote_user: ubuntu
@@ -88,8 +70,6 @@
     ansible_ssh_private_key_file: "./key4CW.pem"
     
   tasks:
-#    - name: update apt cache
-#      apt: update_cache=true
     
     - name: Install packages
       apt: pkg={{ item }} state=latest

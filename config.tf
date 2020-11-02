@@ -54,7 +54,6 @@ resource "aws_security_group" "ubuntu" {
   }
 }
 
-
 resource "local_file" "cloud_pem" { 
   filename = "${path.module}/key4CW.pem"
   content =  "${tls_private_key.example.private_key_pem}"
@@ -71,8 +70,7 @@ resource "aws_instance" "build_instance" {
   user_data = <<EOF
 #!/bin/bash
 sudo apt update
-sudo apt install -y python python-pip
-#sudo usermod -aG docker ubuntu
+sudo apt install -y python
 EOF
   tags = {
     Name = "CW build"
@@ -81,7 +79,6 @@ EOF
     command = "sed -i \"/build/a ${aws_instance.build_instance.public_ip}\" hosts"
   }
 }
-
 
 resource "aws_instance" "stage_instance" {
   ami                    = "${var.image_id}"
@@ -93,8 +90,7 @@ resource "aws_instance" "stage_instance" {
   user_data = <<EOF
 #!/bin/bash
 sudo apt update
-sudo apt install -y python python-pip
-#sudo usermod -aG docker ubuntu
+sudo apt install -y python
 EOF
   tags = {
     Name = "CW stage"
