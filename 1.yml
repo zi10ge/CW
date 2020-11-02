@@ -14,5 +14,8 @@
       with_inventory_hostnames:
         - all
 
+    - name: whoami
+      command: whoami 
+
     - name: ECHO USER
       command: "echo ${DOCKER_USER}"

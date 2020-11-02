@@ -54,9 +54,9 @@
     - name: ECHO USER
       command: "echo ${DOCKER_USER}"  
       
-    - name: Login on dockerhub
-      command: echo "$DOCKER_PASS" | docker login docker.io --username "$DOCKER_USER" --password-stdin
+#    - name: Login on dockerhub
+#      command: echo "$DOCKER_PASS" | docker login docker.io --username "$DOCKER_USER" --password-stdin
 
-    - name: Push dockerimage to github
-      command: docker push zi10ge/appcw:latest
+#    - name: Push dockerimage to github
+#      command: docker push zi10ge/appcw:latest
       
