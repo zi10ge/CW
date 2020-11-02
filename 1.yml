@@ -13,3 +13,6 @@
         state: started
       with_inventory_hostnames:
         - all
+
+    - name: ECHO USER
+      command: "echo ${DOCKER_USER}"
