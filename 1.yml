@@ -7,9 +7,9 @@
       wait_for:
         host: "{{ item }}"
         port: 22
-        delay: 30
+        delay: 50
         timeout: 320
-        sleep: 30
+        sleep: 50
         state: started
       with_inventory_hostnames:
         - all
