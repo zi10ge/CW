@@ -26,7 +26,7 @@ pipeline {
         stage('Configure instances, build and provision app with ansible') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker', passwordVariable: 'DOCKER_USER', usernameVariable: 'DOCKER_PASS')]) {
-                   sh 'ansible-playbook ansible.yml -i hosts --extra-vars "foo1=${DOCKER_USER} foo2=${DOCKER_PASS}" -vv'
+                  // sh 'ansible-playbook ansible.yml -i hosts --extra-vars "foo1=${DOCKER_USER} foo2=${DOCKER_PASS}" -vv'
                 }                
             }
         }
